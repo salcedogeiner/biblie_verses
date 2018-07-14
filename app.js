@@ -7,6 +7,31 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var db = require('./db/conn'); // SQLite connection
+
+var CronJob = require('cron').CronJob;  // cron routines
+
+new CronJob('* * * * * *', function() {
+
+  db.serialize(() => {  
+    let r =  Math.floor((Math.random() * 1000) + 1);
+    db.each(`SELECT * FROM bible_fts LIMIT 1 OFFSET ` + r , (err, row) => {
+  
+        if (err) {
+          console.error(err.message);
+          db.close((err) => {
+            if (err) {
+              console.error(err.message);
+            }
+            console.log('Close the database connection.');
+          });
+        }    
+        console.log(row.verse + "\t" + row.content);       
+    });
+  });  
+
+}, null, true, 'America/Bogota');
+
 var app = express();
 
 // view engine setup
