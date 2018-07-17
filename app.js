@@ -11,7 +11,11 @@ var db = require('./db/conn'); // SQLite connection
 
 var CronJob = require('cron').CronJob;  // cron routines
 
-new CronJob('* * * * * *', function() {
+var bot = require('./routes/bot');
+
+bot.get_bot();
+
+/*new CronJob('* * * * * *', function() {
 
   db.serialize(() => {  
     let r =  Math.floor((Math.random() * 1000) + 1);
@@ -30,7 +34,7 @@ new CronJob('* * * * * *', function() {
     });
   });  
 
-}, null, true, 'America/Bogota');
+}, null, true, 'America/Bogota');*/
 
 var app = express();
 
